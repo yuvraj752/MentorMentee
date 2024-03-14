@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        {% for mentor in mentor_list %}
+            <div class="col-lg-3">
+                <a class='nav-link' href="{% url "mentor-detail" mentor.pk %}">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <img src="{{mentor.image.url}}" alt="avatar"
+                            class="rounded-circle img-fluid my-4" style="height: 212px; width: 200px;">
+                            <h5 class="mt-3 mb-2">{{mentor|title}}</h6>
+                            <p class="mb-1">{{mentor.job_title|title}}</p>
+                            <p class="mb-1">Price: ${{mentor.price|title}}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        {% empty %}
+            <h1 class='d-flex justify-content-center align-items-center vh-100 display-6'>No Mentors found.</h1>
+        {% endfor %}
+
+    </div>
+
+{% if page_obj.paginator.num_pages > 1 %}
+    <div class='my-4'>
+        <ul class="pagination">
+        <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+            <a class="page-link" href="{% if page_obj.has_previous %}?page=1{% endif %}">&laquo;</a>
+        </li>
+        {% for page_num in page_obj.paginator.page_range %}
+            <li class="page-item {% if page_num == page_obj.number %}active{% endif %}">
+            <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+            </li>
+        {% endfor %}
+        <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+            <a class="page-link" href="{% if page_obj.has_next %}?page={{ page_obj.paginator.num_pages }}{% endif %}">&raquo;</a>
+        </li>
+        </ul>
+    </div>
+{% endif %}
+{% endblock content %}
+

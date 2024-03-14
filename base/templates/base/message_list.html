@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class='container'>
+    {% for message in message_list %}
+        {% if message.is_read %}
+            <a class='nav-link mb-1' href='{% url "message-detail" message.pk %}'>
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-start align-items-center">
+                        <span class="badge bg-info rounded-pill fs-6 me-5">{{message.sender.get_full_name|title}}</span>
+                        {{message.body|truncatechars:105}}
+                    </li>
+                </ul>
+            </a>
+        {% else %}
+            <a class='nav-link mb-1' href='{% url "message-detail" message.pk %}'>
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-start align-items-center">
+                        <span class="badge bg-info rounded-pill fs-6 me-5">{{message.sender.get_full_name|title}}</span>
+                        <strong>{{message.body|truncatechars:105}}</strong>
+                    </li>
+                </ul>
+            </a>
+        {% endif %}
+    {% empty %}
+    <h1 class='d-flex justify-content-center align-items-center vh-100 display-6'>No Messages found.</h1>
+    {% endfor %}
+</div>
+{% if page_obj.paginator.num_pages > 1 %}
+    <div class='mx-5'>
+        <ul class="pagination">
+        <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+            <a class="page-link" href="{% if page_obj.has_previous %}?page=1{% endif %}">&laquo;</a>
+        </li>
+        {% for page_num in page_obj.paginator.page_range %}
+            <li class="page-item {% if page_num == page_obj.number %}active{% endif %}">
+            <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+            </li>
+        {% endfor %}
+        <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+            <a class="page-link" href="{% if page_obj.has_next %}?page={{ page_obj.paginator.num_pages }}{% endif %}">&raquo;</a>
+        </li>
+        </ul>
+    </div>
+{% endif %}
+{% endblock content %}

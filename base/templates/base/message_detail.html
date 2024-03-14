@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid my-4">
+    <div class="row py-4">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div class='mb-4'>
+                <span class="badge bg-info rounded-pill fs-5">
+                    {{message.sender.get_full_name|title}}
+                </span>
+            </div>
+            <div class='card'>
+                <div class='card-body'> 
+                    {{message.body|linebreaksbr|urlize}}
+                </div>    
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+    <div class='d-flex justify-content-center'>
+        {% if user.type == 'mentor' %}
+            <a href='{% url "message-reply" message.sender.pk %}'><button type="button" class="btn btn-warning px-5 my-2 mx-2">Reply</button></a>
+            <a href='{% url "video-call" %}' target="_blank"><button type="button" class="btn btn-secondary my-2 px-5 mx-2">Video Call</button></a>
+        {% endif %}
+    </div>    
+</div>
+{% endblock content %}
+        

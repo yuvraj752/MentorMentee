@@ -1,0 +1,82 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mentor Mentee</title>
+    <link rel="stylesheet" href="{% static "bootstrap.min.css" %}">
+  </head>
+  <body class='bg-primary-subtle'>
+    {% comment %} Navbar {% endcomment %}
+    <nav class="navbar navbar-expand-lg bg-primary fixed-top" data-bs-theme="dark">
+      <div class="container-fluid">
+        <a class="navbar-brand mx-md-5 ps-md-5" href="{% url "mentor-list" %}">MentorMentee</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+          {% if user.is_authenticated %}
+            
+              <ul class="navbar-nav me-auto">
+                <li class="nav-item me-2">
+                  {% if 'mentor-detail' in request.path %}
+                    <a class="nav-link active" href="{% url "mentor-detail" user.mentor.pk %}">Hey {{user.get_full_name|title}}
+                      <span class="visually-hidden">(current)</span>
+                    </a>
+                  {% else %}
+                    <a class="nav-link" href="{% url "mentor-detail" user.mentor.pk %}">Hey {{user.get_full_name|title}}</a>
+                  {% endif %}
+                </li>
+                <li class="nav-item">
+                  {% if 'message-list' in request.path %}
+                    <a class="nav-link active" href="{% url "message-list" user.pk %}">Messages
+                      <span class="visually-hidden">(current)</span>
+                    </a>
+                  {% else %}
+                    <a class="nav-link" href="{% url "message-list" user.pk %}">Messages</a>
+                  {% endif %}
+                </li>
+                <li class="nav-item">
+                  <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+                    <button class='btn btn-success btn-sm my-1 ms-md-3' type="submit">Log Out</button>
+                  </form>
+                </li>
+              </ul>
+          {% else %}
+            <ul class="navbar-nav me-auto">
+              <li class="nav-item me-2">
+                {% if 'register' in request.path %}
+                  <a class="nav-link active" href="{% url "register" %}">Register
+                    <span class="visually-hidden">(current)</span>
+                  </a>
+                {% else %}
+                  <a class="nav-link" href="{% url "register" %}">Register</a>
+                {% endif %}
+
+              </li>
+              <li class="nav-item">
+                {% if 'login' in request.path %}
+                <a class="nav-link active" href="{% url "login" %}">Login
+                  <span class="visually-hidden">(current)</span>
+                </a>
+              {% else %}
+                <a class="nav-link" href="{% url "login" %}">Login</a>
+              {% endif %}
+              </li>
+            </ul>
+          {% endif %}
+          <form class="d-flex me-md-5 px-md-5">
+            <input class="form-control me-sm-2" type="search" placeholder="Search">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+    <div class='container'>
+      {% block content %}{% endblock content %}
+    <div>
+  </body>
+  <script src="{% static "bootstrap.bundle.min.js" %}"></script>
+</html>

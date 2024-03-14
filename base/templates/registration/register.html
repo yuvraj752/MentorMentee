@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% comment %} {% load crispy_forms_tags %} {% endcomment %}
+
+{% block content %}
+<main>
+  <form method='post', action='{% url "register" %}'>{% csrf_token %}
+    <div class='row align-items-center vh-100'>
+      <div class='row justify-content-center pe-0'>
+        <div class="row">
+          <div class="col-md-2"></div>
+          <div class="col-md-8 px-md-1 px-0"><h1 class="h3 mb-3 fw-normal">Register</h1></div>
+        </div>
+
+        <div class="col-md-4">
+          {% comment %} {{ form|crispy }} {% endcomment %}
+          <div class="form-floating mb-3">
+            {{ form.username}}
+            <label for="floatUsername">{{ form.username.label }}</label>
+            <div class="has-danger">
+              <div class="invalid-feedback">{{ form.username.errors}}</div>
+            </div>
+            
+          </div>  
+          <div class="form-floating mb-3">
+            {{ form.first_name}}
+            <label for="floatFirstName">{{ form.first_name.label}}</label>
+            {{ form.first_name.errors}}
+          </div>
+          <div class="form-floating mb-3">
+            {{ form.email}}
+            <label for="floatEmail">{{ form.email.label}}</label>
+            {{ form.email.errors}}
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-floating mb-3">
+            {{ form.type}}
+            <label for="floatType">{{ form.type.label}}</label>
+            {{ form.type.errors}}
+          </div>
+          <div class="form-floating mb-3">
+            {{ form.password1}}
+            <label for="floatPassword1">{{ form.password1.label}}</label>
+          </div>
+          <div class="has-danger">
+            <div class="invalid-feedback">{{ form.password1.errors}}</div>
+          </div>
+          <div class="form-floating mb-3">
+            {{ form.password2}}
+            <label for="floatPassword2">{{ form.password2.label}}</label>
+          </div>
+          <div class="has-danger">
+            <div class="invalid-feedback">{{ form.password2.errors}}</div>
+          </div>
+          
+        </div>
+        <div class="row">
+          <div class="col-md-2"></div>
+          <div class="col-md-8 px-md-1 px-0"><button class="btn btn-primary py-2 w-100" type="submit">Register</button></div>
+        </div>
+        
+      </div>
+    </div>
+    
+    
+  </form>
+</main>
+{% endblock content %}

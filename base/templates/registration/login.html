@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% comment %} {% load crispy_forms_tags %} {% endcomment %}
+
+{% block content %}
+
+  <div class="row justify-content-center align-items-center vh-100">
+      <div class="col-md-4">  
+        <main class="form-signin w-100 m-auto">
+          <form method='post', action='{% url "login" %}'>{% csrf_token %}
+            <h1 class="h3 mb-3 fw-normal">Log In</h1>
+              {% comment %} {{ form|crispy }} {% endcomment %}
+              <div class="form-floating mb-3">
+                {{ form.username}}
+                <label for="floatUsername">{{ form.username.label }}</label>
+                {{ form.username.errors}}
+              </div> 
+              <div class="form-floating mb-3">
+                {{ form.password}}
+                <label for="floatPassword">{{ form.password.label }}</label>
+                {{ form.password.errors}}
+              </div> 
+            <button class="btn btn-primary w-100 py-2" type="submit">Log In</button>
+          </form>
+        </main>
+      </div>
+  </div>
+{% endblock content %}
