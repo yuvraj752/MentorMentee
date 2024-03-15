@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -139,13 +141,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
-# CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-# CRISPY_TEMPLATE_PACK = "bootstrap5"
-
 AUTH_USER_MODEL = "base.User"
 
 LOGOUT_REDIRECT_URL = '/'
 
 # Add ZEGOCLOUD appID and serverSecret in video-call.html
-APP_ID = 626908848 
-SERVER_SECRET = 'ea3684676410e27f9125b8f5cb04ac95'
+load_dotenv()
+APP_ID = os.getenv("APP_ID")
+SERVER_SECRET = os.getenv("SERVER_SECRET")
