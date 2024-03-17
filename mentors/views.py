@@ -1,3 +1,4 @@
+from django.forms import BaseModelForm
 from django.views import generic
 from .models import Mentor
 from django.db.models import Q
@@ -26,7 +27,7 @@ class MentorEdit(generic.UpdateView):
     model = Mentor
     fields = ('name', 'image', 'email', 'job_title', 
               'price', 'category', 'skill', 'description')
-
+    
     def get_success_url(self):
         pk = self.object.pk
         return reverse_lazy('mentor-detail', args=[pk])
