@@ -2,11 +2,13 @@ from django.views import generic
 from .models import Mentor
 from django.db.models import Q
 from django.urls import reverse_lazy
+from django.contrib.messages.views import SuccessMessageMixin
+from .forms import MentorForm
 
 # Create your views here.
-class MentorList(generic.ListView):
+class MentorSearch(generic.ListView):
     paginate_by = 32
-    queryset = Mentor.objects.filter(approved=True)
+    queryset = Mentor.objects.filter(approved=True).order_by('created')
 
     def get_queryset(self):
         query = self.request.GET.get('query')
@@ -22,11 +24,11 @@ class MentorList(generic.ListView):
 class MentorDetail(generic.DetailView):
     model = Mentor
 
-class MentorEdit(generic.UpdateView):
+class MentorFormView(SuccessMessageMixin, generic.UpdateView):
     model = Mentor
-    fields = ('name', 'image', 'email', 'job_title', 
-              'price', 'category', 'skill', 'description')
+    form_class = MentorForm
+    success_message = "Profile updated successfully."
     
     def get_success_url(self):
         slug = self.object.slug
-        return reverse_lazy('mentor-detail', args=[slug])
+        return reverse_lazy('mentor_detail', args=[slug])

@@ -2,102 +2,118 @@
 
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Mentor Mentee</title>
-    <link rel="stylesheet" href="{% static "bootstrap.min.css" %}">
-    <style>.asteriskField {display: none;}</style>
-  </head>
-  <body class='bg-primary-subtle'>
-    <nav class="navbar navbar-expand-lg bg-primary fixed-top" data-bs-theme="dark">
-      <div class="container-fluid">
-        <a class="navbar-brand mx-md-5 ps-md-5" href="{% url "mentor_list" %}">MentorMentee</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarColor01">
-          {% if user.is_authenticated %}
-            {% if user.type == 'mentor' %}
-              <ul class="navbar-nav me-auto">
-                <li class="nav-item me-2">
-                  {% if 'mentor_detail' in request.path %}
-                    <a class="nav-link active" href="{% url "mentor_detail" user.mentor.slug %}">Hey {{user.get_full_name|title}}
-                      <span class="visually-hidden">(current)</span>
-                    </a>
-                  {% else %}
-                    <a class="nav-link" href="{% url "mentor_detail" user.mentor.slug %}">Hey {{user.get_full_name|title}}</a>
-                  {% endif %}
-                </li>
-                <li class="nav-item">
-                  {% if 'message-list' in request.path %}
-                    <a class="nav-link active" href="">Messages
-                      <span class="visually-hidden">(current)</span>
-                    </a>
-                  {% else %}
-                    <a class="nav-link" href="">Messages</a>
-                  {% endif %}
-                </li>
-                <li class="nav-item">
-                  <form method="post" action="{% url 'logout' %}">{% csrf_token %}
-                    <button class='btn btn-success btn-sm my-1 ms-md-3' type="submit">Log Out</button>
-                  </form>
-                </li>
-              </ul>
-            {% else %}
-              <ul class="navbar-nav me-auto">
-                <li class="nav-item me-2">
-                  <a class="nav-link text-light">Hey {{user.get_full_name|title}}</a>
-                </li>
-                <li class="nav-item">
-                  {% if 'message-list' in request.path %}
-                    <a class="nav-link active" href="">Messages
-                      <span class="visually-hidden">(current)</span>
-                    </a>
-                  {% else %}
-                    <a class="nav-link" href="">Messages</a>
-                  {% endif %}
-                </li>
-                <li class="nav-item">
-                  <form method="post" action="{% url 'logout' %}">{% csrf_token %}
-                    <button class='btn btn-success btn-sm my-1 ms-md-3' type="submit">Log Out</button>
-                  </form>
-                </li>
-              </ul>
-            {% endif %}
-          {% else %}
-            <ul class="navbar-nav me-auto">
-              <li class="nav-item me-2">
-                {% if 'register' in request.path %}
-                  <a class="nav-link active" href="{% url "register" %}">Register
-                    <span class="visually-hidden">(current)</span>
-                  </a>
-                {% else %}
-                  <a class="nav-link" href="{% url "register" %}">Register</a>
-                {% endif %}
 
-              </li>
-              <li class="nav-item">
-                {% if 'login' in request.path %}
-                <a class="nav-link active" href="{% url "login" %}">Login
-                  <span class="visually-hidden">(current)</span>
-                </a>
-              {% else %}
-                <a class="nav-link" href="{% url "login" %}">Login</a>
-              {% endif %}
-              </li>
-            </ul>
-          {% endif %}
-          <form class="d-flex me-md-5 px-md-5">
-            <input class="form-control me-sm-2" type="search" placeholder="Search">
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-          </form>
-        </div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mentor Mentee</title>
+  <link rel="stylesheet" href="{% static "bootstrap.css" %}">
+</head>
+
+<body class='bg-primary-subtle'>
+  <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand mx-md-5 ps-md-5" href="{% url "home" %}">MentorMentee</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+        aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarColor01">
+        {% if user.is_authenticated %}
+        {% if user.type == 'mentor' %}
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item me-2">
+            {% if 'mentor_detail' in request.path %}
+            <a class="nav-link active" href="{% url "mentor_detail" user.mentor.slug %}">Hey
+              {{user.get_full_name|title}}
+              <span class="visually-hidden">(current)</span>
+            </a>
+            {% else %}
+            <a class="nav-link" href="{% url "mentor_detail" user.mentor.slug %}">Hey {{user.get_full_name|title}}</a>
+            {% endif %}
+          </li>
+          <li class="nav-item">
+            {% if 'message-list' in request.path %}
+            <a class="nav-link active" href="">Messages
+              <span class="visually-hidden">(current)</span>
+            </a>
+            {% else %}
+            <a class="nav-link" href="">Messages</a>
+            {% endif %}
+          </li>
+          <li class="nav-item">
+            <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+              <button class='btn btn-success btn-sm my-1 ms-md-3' type="submit">Log Out</button>
+            </form>
+          </li>
+        </ul>
+        {% else %}
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item me-2">
+            <a class="nav-link text-light">Hey {{user.get_full_name|title}}</a>
+          </li>
+          <li class="nav-item">
+            {% if 'message-list' in request.path %}
+            <a class="nav-link active" href="">Messages
+              <span class="visually-hidden">(current)</span>
+            </a>
+            {% else %}
+            <a class="nav-link" href="">Messages</a>
+            {% endif %}
+          </li>
+          <li class="nav-item">
+            <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+              <button class='btn btn-success btn-sm my-1 ms-md-3' type="submit">Log Out</button>
+            </form>
+          </li>
+        </ul>
+        {% endif %}
+        {% else %}
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item me-2">
+            {% if 'register' in request.path %}
+            <a class="nav-link active" href="{% url "register" %}">Register
+              <span class="visually-hidden">(current)</span>
+            </a>
+            {% else %}
+            <a class="nav-link" href="{% url "register" %}">Register</a>
+            {% endif %}
+
+          </li>
+          <li class="nav-item">
+            {% if 'login' in request.path %}
+            <a class="nav-link active" href="{% url "login" %}">Login
+              <span class="visually-hidden">(current)</span>
+            </a>
+            {% else %}
+            <a class="nav-link" href="{% url "login" %}">Login</a>
+            {% endif %}
+          </li>
+        </ul>
+        {% endif %}
+        <form class="d-flex me-md-5 px-md-5" action={% url "mentor_search" %}>
+          <input class="form-control me-sm-2" type="search" placeholder="Search" name='query'>
+          <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </form>
       </div>
-    </nav>
-    <div class='container'>
-      {% block content %}{% endblock content %}
+    </div>
+  </nav>
+  {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-info text-center" role='alert'>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle me-2" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+            <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"/>
+          </svg>
+          {{message}}
+        </div>
+
+      {% endfor %}
+
+  {% endif %}
+  <div class='container'>
+    {% block content %}{% endblock content %}
     <div>
-  </body>
-  <script src="{% static "bootstrap.bundle.min.js" %}"></script>
+</body>
+<script src="{% static "bootstrap.bundle.js" %}"></script>
 </html>
