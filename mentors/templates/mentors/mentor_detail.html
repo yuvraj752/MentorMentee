@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 
 {% block content %}
 <div class="row my-5">
@@ -15,7 +15,7 @@
           {% if user == mentor.user %}
           <a href='{% url "mentor_form" mentor.pk %}'><button type="button" class="btn btn-primary">Edit Profile</button></a>
           {% else %}
-            <button type="button" class="btn btn-primary px-3">Chat</button>
+            <a href='{% url "chat" %}'><button type="button" class="btn btn-primary px-3">Chat</button></a>
           {% endif %}
         </div>
       </div>
