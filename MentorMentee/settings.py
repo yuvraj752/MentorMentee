@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     'base',
-    'mentors',
 ]
 
 MIDDLEWARE = [
@@ -156,7 +155,10 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
-APP_ID = os.environ.get("APP_ID")
-SERVER_SECRET = os.environ.get("SERVER_SECRET")
-
 ASGI_APPLICATION = 'MentorMentee.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'
+    }
+}
