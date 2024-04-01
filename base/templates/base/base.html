@@ -34,12 +34,19 @@
             {% endif %}
           </li>
           <li class="nav-item">
-            {% if 'message-list' in request.path %}
-            <a class="nav-link active" href="">Messages
+            {% if 'chat_room_list' in request.path %}
+            <a class="nav-link active" href="{% url 'chat_room_list' %}">Messages 
+              {% if user.unread_chat_count > 0 %} 
+                <span class="badge rounded-pill bg-secondary">{{user.unread_chat_count}}</span> 
+              {% endif %}
               <span class="visually-hidden">(current)</span>
             </a>
             {% else %}
-            <a class="nav-link" href="">Messages</a>
+            <a class="nav-link" href="{% url 'chat_room_list' %}">Messages 
+              {% if user.unread_chat_count > 0 %} 
+                <span class="badge rounded-pill bg-secondary">{{user.unread_chat_count}}</span>
+              {% endif %}
+            </a>
             {% endif %}
           </li>
           <li class="nav-item">
@@ -54,12 +61,19 @@
             <a class="nav-link text-light">Hey {{user.get_full_name|title}}</a>
           </li>
           <li class="nav-item">
-            {% if 'message-list' in request.path %}
-            <a class="nav-link active" href="">Messages
+            {% if 'chat_room_list' in request.path %}
+            <a class="nav-link active" href="{% url 'chat_room_list' %}">Messages 
+              {% if user.unread_chat_count > 0 %} 
+                <span class="badge rounded-pill bg-secondary">{{user.unread_chat_count}}</span>
+              {% endif %}
               <span class="visually-hidden">(current)</span>
             </a>
             {% else %}
-            <a class="nav-link" href="">Messages</a>
+            <a class="nav-link" href="{% url 'chat_room_list' %}">Messages 
+              {% if user.unread_chat_count > 0 %} 
+                <span class="badge rounded-pill bg-secondary">{{user.unread_chat_count}}</span>
+              {% endif %}
+            </a>
             {% endif %}
           </li>
           <li class="nav-item">

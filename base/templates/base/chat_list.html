@@ -1,0 +1,123 @@
+{% extends "base/base.html" %}
+{% load humanize %}
+
+{% block content %}
+<div class="row my-5 justify-content-center">
+  <div class="col-md-99 col-lg-10 col-xl-11">
+      <ul class="list-unstyled" id="messages">
+        {% for chat in object_list %}
+          {% if chat.sender.username == mentor_username %}
+            <li class="d-flex justify-content-end mb-4">
+              <div class='col-md-6'>
+                <div class="card bg-warning-subtle">
+                  <div class="card-header d-flex justify-content-between p-3">
+                    <p class="fw-bold mb-0">{{chat.sender.first_name|title}}</p>
+                    <p class="text-muted small mb-0 ms-5"><i class="far fa-clock"></i>{{chat.created|naturaltime}}</p>
+                  </div>
+                  <div class="card-body">
+                    <p class="mb-0">
+                      {{chat.message}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </li>
+          {% else %}
+            <li class="d-flex mb-4">
+              <div class='col-md-6'>
+                <div class="card bg-info-subtle">
+                  <div class="card-header d-flex justify-content-between p-3">
+                    <p class="fw-bold mb-0">{{chat.sender.first_name|title}}</p>
+                    <p class="text-muted small mb-0 ms-5"><i class="far fa-clock"></i>{{chat.created|naturaltime}}</p>
+                  </div>
+                  <div class="card-body">
+                    <p class="mb-0">
+                      {{chat.message}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+      <div class="form-outline mb-3">
+        <textarea class="form-control" id="text-area" rows="4"></textarea>
+      </div>
+      <button type="button" class="btn btn-success float-end px-5" id="send">Send</button>
+
+  </div>
+
+</div>
+{{ chat_room|json_script:"chat-room" }}
+{{ sender_username|json_script:"sender-username" }}
+{{ reciever_username|json_script:"reciever-username" }}
+<script>
+  window.scrollTo(0, document.body.scrollHeight)
+  const chatRoom = JSON.parse(document.getElementById('chat-room').textContent)
+  const senderUsername = JSON.parse(document.getElementById('sender-username').textContent)
+  const recieverUsername = JSON.parse(document.getElementById('reciever-username').textContent)
+  
+  const url = `ws://${window.location.host}/ws/chat/${chatRoom}`
+  const chatWebSocket = new WebSocket(url)
+  
+  chatWebSocket.onmessage = (event) => {
+      const data = JSON.parse(event.data)
+      const messages = document.querySelector('#messages')
+      mentorUsername = chatRoom.split('-')[0]
+      if (data.senderUsername === mentorUsername) {
+        messages.insertAdjacentHTML('beforeend', 
+          `<li class="d-flex justify-content-end mb-4">
+            <div class='col-md-6'>
+              <div class="card">
+                <div class="card-header d-flex justify-content-between p-3">
+                  <p class="fw-bold mb-0">${data.fullName}</p>
+                  <p class="text-muted small mb-0 ms-5"><i class="far fa-clock"></i>${data.created}</p>
+                </div>
+                <div class="card-body">
+                  <p class="mb-0">
+                    ${data.chat}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </li>`
+        )
+      } else {
+        messages.insertAdjacentHTML('beforeend', 
+          `<li class="d-flex mb-4">
+            <div class='col-md-6'>
+              <div class="card">
+                <div class="card-header d-flex justify-content-between p-3">
+                  <p class="fw-bold mb-0">${data.fullName}</p>
+                  <p class="text-muted small mb-0 ms-5">${data.created}</p>
+                </div>
+                <div class="card-body">
+                  <p class="mb-0">
+                    ${data.chat}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </li>`
+        )
+      }
+  }
+
+  const sendButton = document.querySelector('#send')
+  const textArea = document.querySelector('#text-area')
+
+  sendButton.addEventListener('click', () => {
+    const chat = textArea.value
+    if (chat) {
+      chatWebSocket.send(JSON.stringify({ 
+        senderUsername: senderUsername,
+        recieverUsername: recieverUsername,
+        chatRoom: chatRoom,
+        chat: chat
+      }))
+      textArea.value = ''
+    }
+  })
+</script>
+{% endblock content %}
