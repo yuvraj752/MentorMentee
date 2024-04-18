@@ -25,12 +25,11 @@
         <ul class="navbar-nav me-auto">
           <li class="nav-item me-2">
             {% if 'mentor_detail' in request.path %}
-            <a class="nav-link active" href="{% url "mentor_detail" user.mentor.slug %}">Hey
-              {{user.get_full_name|title}}
-              <span class="visually-hidden">(current)</span>
-            </a>
+              <a class="nav-link active" href="{% url "mentor_detail" user.mentor.slug %}">Hey {{user.get_full_name|title|truncatechars:20}}
+                <span class="visually-hidden">(current)</span>
+              </a>
             {% else %}
-            <a class="nav-link" href="{% url "mentor_detail" user.mentor.slug %}">Hey {{user.get_full_name|title}}</a>
+              <a class="nav-link" href="{% url "mentor_detail" user.mentor.slug %}">Hey {{user.get_full_name|title|truncatechars:20}}</a>
             {% endif %}
           </li>
           <li class="nav-item">
@@ -58,7 +57,11 @@
         {% else %}
         <ul class="navbar-nav me-auto">
           <li class="nav-item me-2">
-            <a class="nav-link text-light">Hey {{user.get_full_name|title}}</a>
+            {% if 'mentee_update' in request.path %}
+              <a class="nav-link active" href="{% url "mentee_update" user.pk %}">Hey {{user.get_full_name|title|truncatechars:20}}</a>
+            {% else %}
+              <a class="nav-link" href="{% url "mentee_update" user.pk %}">Hey {{user.get_full_name|title|truncatechars:20}}</a>
+            {% endif %}
           </li>
           <li class="nav-item">
             {% if 'chat_room_list' in request.path %}

@@ -13,7 +13,7 @@
         <div class="d-flex justify-content-center mb-1">
           {% comment %} Edit Icon {% endcomment %}
           {% if user == mentor.user %}
-          <a href='{% url "mentor_form" mentor.pk %}'><button type="button" class="btn btn-primary">Edit Profile</button></a>
+          <a href='{% url "mentor_update" mentor.pk %}'><button type="button" class="btn btn-primary">Edit Profile</button></a>
           {% else %}
             <a href='{% url "chat" chat_room %}'><button type="button" class="btn btn-primary px-3">Chat</button></a>
           {% endif %}

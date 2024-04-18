@@ -13,17 +13,17 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="d-flex align-items-center">
                                         {% if chat_room.last_chat.sender == request.user %}
-                                            <p class="fw-bold mb-0 me-3">{{ chat_room.last_chat.reciever.first_name|title }}</p>
+                                            <p class="fw-bold mb-0 me-3">{{ chat_room.last_chat.reciever.first_name|title|truncatechars:20 }}</p>
                                         {% else %}
-                                            <p class="fw-bold mb-0 me-3">{{ chat_room.last_chat.sender.first_name|title }}</p>
+                                            <p class="fw-bold mb-0 me-3">{{ chat_room.last_chat.sender.first_name|title|truncatechars:20 }}</p>
                                         {% endif %}
                                         <p class="small text-muted mb-0 me-3">{{ chat_room.last_chat|truncatechars:80 }}</p>
                                     </div>
                                     <div class="d-flex align-items-center">
                                         <p class="small text-muted
                                          mb-0 me-2">{{ chat_room.last_chat.created|naturaltime }}</p>
-                                        {% if chat_room.unread_chat_count and  request.user != chat_room.last_chat.sender %}
-                                        <span class="badge rounded-pill bg-secondary">{{chat_room.unread_chat_count}}</span>
+                                        {% if chat_room.unread_chat_count and request.user != chat_room.last_chat.sender %}
+                                            <span class="badge rounded-pill bg-secondary">{{chat_room.unread_chat_count}}</span>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -32,7 +32,8 @@
                     </ul>
                 </div>
             </div>
-            
+        {% empty %}
+            <h3 class='mb-5 mt-4 fw-normal'>No Messages found.</h3>
         {% endfor %}
     </div>
 </div>

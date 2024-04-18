@@ -11,7 +11,7 @@
               <div class='col-md-6'>
                 <div class="card bg-warning-subtle">
                   <div class="card-header d-flex justify-content-between p-3">
-                    <p class="fw-bold mb-0">{{chat.sender.first_name|title}}</p>
+                    <p class="fw-bold mb-0">{{chat.sender.get_full_name|title|truncatechars:20}}</p>
                     <p class="text-muted small mb-0 ms-5"><i class="far fa-clock"></i>{{chat.created|naturaltime}}</p>
                   </div>
                   <div class="card-body">
@@ -27,7 +27,7 @@
               <div class='col-md-6'>
                 <div class="card bg-info-subtle">
                   <div class="card-header d-flex justify-content-between p-3">
-                    <p class="fw-bold mb-0">{{chat.sender.first_name|title}}</p>
+                    <p class="fw-bold mb-0">{{chat.sender.get_full_name|title|truncatechars:20}}</p>
                     <p class="text-muted small mb-0 ms-5"><i class="far fa-clock"></i>{{chat.created|naturaltime}}</p>
                   </div>
                   <div class="card-body">
@@ -57,10 +57,14 @@
   const chatRoom = JSON.parse(document.getElementById('chat-room').textContent)
   const senderUsername = JSON.parse(document.getElementById('sender-username').textContent)
   const recieverUsername = JSON.parse(document.getElementById('reciever-username').textContent)
-  
+  const truncateChars = (str, num) => {
+    if (str.length <= num) {
+        return str
+    }
+    return `${str.slice(0, num)}...`
+  }
   const url = `ws://${window.location.host}/ws/chat/${chatRoom}`
   const chatWebSocket = new WebSocket(url)
-  
   chatWebSocket.onmessage = (event) => {
       const data = JSON.parse(event.data)
       const messages = document.querySelector('#messages')
@@ -69,9 +73,9 @@
         messages.insertAdjacentHTML('beforeend', 
           `<li class="d-flex justify-content-end mb-4">
             <div class='col-md-6'>
-              <div class="card">
+              <div class="card bg-warning-subtle">
                 <div class="card-header d-flex justify-content-between p-3">
-                  <p class="fw-bold mb-0">${data.fullName}</p>
+                  <p class="fw-bold mb-0">${truncateChars(data.fullName, 20)}</p>
                   <p class="text-muted small mb-0 ms-5"><i class="far fa-clock"></i>${data.created}</p>
                 </div>
                 <div class="card-body">
@@ -87,9 +91,9 @@
         messages.insertAdjacentHTML('beforeend', 
           `<li class="d-flex mb-4">
             <div class='col-md-6'>
-              <div class="card">
+              <div class="card bg-info-subtle">
                 <div class="card-header d-flex justify-content-between p-3">
-                  <p class="fw-bold mb-0">${data.fullName}</p>
+                  <p class="fw-bold mb-0">${truncateChars(data.fullName, 20)}</p>
                   <p class="text-muted small mb-0 ms-5">${data.created}</p>
                 </div>
                 <div class="card-body">

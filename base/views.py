@@ -1,12 +1,13 @@
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from .forms import UserCreationForm, LoginForm
 from django.urls import reverse_lazy
-from .models import Mentor, ChatRoom
+from .models import User, Mentor, ChatRoom
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.views import LoginView
-from .forms import MentorForm
-from django.db.models import Q
+from .forms import MenteeForm, MentorForm
+from django.db.models import Q, Max
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils import timezone
 
 # Create your views here.
 class Home(ListView):
@@ -14,15 +15,21 @@ class Home(ListView):
     template_name = "base/home.html"
     queryset = Mentor.objects.filter(approved=True)[:4]
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["year"] = timezone.now().year 
+        return context
+    
 class Register(SuccessMessageMixin, CreateView):
     form_class = UserCreationForm
-    template_name = 'registration/register.html'
+    template_name = 'auth/register.html'
     success_url = reverse_lazy('login')
     success_message = "Account created successfully."
 
 class Login(SuccessMessageMixin, LoginView):
     form_class = LoginForm
     success_message = 'You are now logged in.'
+    template_name = 'auth/login.html'
     
     def get_success_url(self):
         if self.request.user.type == 'mentee': 
@@ -30,13 +37,22 @@ class Login(SuccessMessageMixin, LoginView):
         slug = self.request.user.mentor.slug
         return reverse_lazy('mentor_detail', args=[slug])
 
-class MentorSearch(ListView):
-    paginate_by = 32
+class MenteeUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = User
+    form_class = MenteeForm
+    template_name = 'base/mentee_form.html'
+    success_message = "Profile updated successfully."
 
+    def get_success_url(self):
+        return reverse_lazy('home')
+    
+class MentorSearch(ListView):
+    paginate_by = 16
+    queryset = Mentor.objects.filter(approved=True)
     def get_queryset(self):
         query = self.request.GET.get('query')
         if query:
-            return Mentor.objects.filter(approved=True).filter(
+            return self.queryset.filter(
                 Q(name__icontains=query) | Q(description__icontains=query) | 
                 Q(job_title__icontains=query) | Q(category__icontains=query) | 
                 Q(skill__icontains=query)
@@ -52,7 +68,7 @@ class MentorDetail(DetailView):
         context["chat_room"] = chat_room 
         return context
     
-class MentorForm(LoginRequiredMixin,SuccessMessageMixin, UpdateView):
+class MentorUpdate(LoginRequiredMixin,SuccessMessageMixin, UpdateView):
     model = Mentor
     form_class = MentorForm
     success_message = "Profile updated successfully."
@@ -83,13 +99,17 @@ class ChatList(LoginRequiredMixin, ListView):
         return context
     
     def get(self, request, *args, **kwargs):
-        chat_room = ChatRoom.objects.get(name=self.kwargs['chat_room'])
-        chat_room.chat_set.filter(is_read=False).exclude(sender=request.user).update(is_read=True)
+        chats = self.get_queryset()
+        chats.filter(is_read=False).exclude(sender=request.user).update(is_read=True)
         return super().get(request, *args, **kwargs)
     
 class ChatRoomList(LoginRequiredMixin, ListView):
     paginate_by = 16
+    queryset = ChatRoom.objects.annotate(last_chat_created=Max('chat__created')).order_by('-last_chat_created')
 
     def get_queryset(self):
-        username = self.request.user.username
-        return ChatRoom.objects.filter(name__contains=username).filter(chat__isnull=False).distinct()
+        if self.request.user.type == 'mentor':
+            username = self.request.user.username + '-'
+        else:
+            username = '-' + self.request.user.username
+        return super().get_queryset().filter(name__contains=username).filter(chat__isnull=False).distinct()
