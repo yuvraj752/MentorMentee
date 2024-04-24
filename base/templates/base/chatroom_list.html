@@ -17,7 +17,11 @@
                                         {% else %}
                                             <p class="fw-bold mb-0 me-3">{{ chat_room.last_chat.sender.first_name|title|truncatechars:20 }}</p>
                                         {% endif %}
-                                        <p class="small text-muted mb-0 me-3">{{ chat_room.last_chat|truncatechars:80 }}</p>
+                                        {% if chat_room.unread_chat_count and request.user != chat_room.last_chat.sender %}
+                                            <p class="small fw-bold text-black-50 mb-0 me-3">{{ chat_room.last_chat|truncatechars:80 }}</p>
+                                        {% else %}
+                                            <p class="small text-muted mb-0 me-3">{{ chat_room.last_chat|truncatechars:80 }}</p>
+                                        {% endif %}
                                     </div>
                                     <div class="d-flex align-items-center">
                                         <p class="small text-muted
