@@ -1,13 +1,5 @@
 # MentorMentee
-A responsive marketplace for mentees to search mentors and chat in real-time using django channels with a custom admin panel.
-
-## Tech Stack
-* Django
-* Django Channels
-* Python
-* Bootstrap
-* JavaScript
-* SQL
+Website for mentees to search mentors and chat with them in real-time.
 
 ## Home
 <img src="./resources/1 Home.PNG">  
@@ -23,9 +15,6 @@ A responsive marketplace for mentees to search mentors and chat in real-time usi
 
 ## Admin
 <img src="./resources/7 Admin.PNG">
-
-## Login
-<img src="./resources/5 Login.PNG">
 
 ## Responsive
 <img src="./resources/8 Responsive.PNG">
