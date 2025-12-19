@@ -1,5 +1,5 @@
 # MentorMentee
-A platform where mentees can search for mentors, connect with them, and engage in real-time chats for guidance and learning.
+A social network where mentees can search for mentors, connect with them, and engage in real-time chats for guidance and learning.
 
 ## Home
 <img src="./resources/1 Home.PNG">  
